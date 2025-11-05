@@ -10,3 +10,8 @@ pip install selenium pandas openpyxl
 comando Aut Edge open port
 
 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --remote-debugging-port=9222 --user-data-dir="C:\EdgeAutomationProfile"
+
+
+Buscar si el input tiene un name o id o incluso por css
+
+INPUT_SELECTOR = 'input.el-input__inner'
