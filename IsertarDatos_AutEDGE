@@ -1,0 +1,40 @@
+
+import time
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+# === CONFIGURACIÓN ===
+EXCEL_PATH = r"C:\Users\IMX078758\Downloads\unitsRework.xlsx"
+COLUMN_NAME = "sno"
+DELAY = 3  # segundos entre inserciones
+INPUT_SELECTOR = 'input.el-input__inner'
+
+# === CONECTAR A EDGE EXISTENTE ===
+options = webdriver.EdgeOptions()
+options.debugger_address = "127.0.0.1:9222"
+driver = webdriver.Edge(options=options)
+
+# === LEER DATOS DE EXCEL ===
+df = pd.read_excel(EXCEL_PATH)
+
+# Tomar los datos desde la fila 35 (índice 34) hasta el final
+datos = df.loc[34:, COLUMN_NAME].dropna().astype(str).tolist()
+
+print(f"➡️ Se insertarán {len(datos)} valores desde la fila 35 hasta el final.")
+print(f"Primeros valores: {datos[:5]}{'...' if len(datos) > 5 else ''}")
+
+# === INSERTAR DATOS Y PRESIONAR ENTER ===
+for dato in datos:
+    try:
+        input_box = driver.find_element(By.CSS_SELECTOR, INPUT_SELECTOR)
+        input_box.clear()
+        input_box.send_keys(dato)
+        input_box.send_keys(Keys.ENTER)
+        print(f"✅ Insertado y enviado: {dato}")
+        time.sleep(DELAY)
+    except Exception as e:
+        print(f"⚠️ Error al insertar {dato}: {e}")
+
+print("🎯 Inserción completada correctamente.")
